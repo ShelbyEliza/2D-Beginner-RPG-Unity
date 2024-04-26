@@ -1,5 +1,17 @@
-Assets
+/Assets/Art
+/Assets/Settings
+/Assets/UnityTechnologies
+/Assets/Scenes
+/Assets/Prefabs
+*.png
+*.meta
+*.asset
 .vscode
 Assembly-CSharp.csproj
 /2D Beginner Ruby.sln
 /Packages
+/Library
+/Logs
+/ProjectSettings
+/Temp
+/UserSettings

@@ -2,18 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CollectibleHealth : MonoBehaviour
+public class HealingZone : MonoBehaviour
 {
-    public int HealthCollectibleVal = 2;
+    public int HealingVal = 1;
 
-    void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerStay2D(Collider2D other) 
     {
         PlayerController controller = other.GetComponent<PlayerController>();
 
         if (controller != null && controller.health < controller.maxHealth)
         {
-            controller.ChangeHealth(HealthCollectibleVal);
-            Destroy(gameObject);
+            controller.ChangeHealth(HealingVal, true);
         }
     }
 }

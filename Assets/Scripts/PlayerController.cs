@@ -24,14 +24,14 @@ public class PlayerController : MonoBehaviour
     // Variables related to the health system
     public int maxHealth = 5;
     public int health { get { return currentHealth; }}
-    int currentHealth = 1;
+    int currentHealth;
 
     // Start is called before the first frame update
     void Start()
     {
         MoveAction.Enable();
         rigidbody2d = GetComponent<Rigidbody2D>();
-        // currentHealth = maxHealth;
+        currentHealth = maxHealth;
     }
 
     // Update is called once per frame
@@ -66,8 +66,10 @@ public class PlayerController : MonoBehaviour
 
     public void ChangeHealth (int amount, bool overTime = false)
     {
+        //  Debug.Log("amount" + amount);
         if (amount < 0)
         {
+            Debug.Log("isInvincible: " + isInvincible);
             if (isInvincible)
             {
                 return;
@@ -84,6 +86,7 @@ public class PlayerController : MonoBehaviour
         }        
 
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+        MyUIHandler.Instance.SetHealthValue(currentHealth / (float)maxHealth);
         Debug.Log(currentHealth + "/" + maxHealth);
     }
 }

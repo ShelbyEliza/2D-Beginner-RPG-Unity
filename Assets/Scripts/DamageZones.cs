@@ -12,7 +12,6 @@ public class DamageZones : MonoBehaviour
 
         if (controller != null && controller.health != 0)
         {
-
             controller.ChangeHealth(DamageVal);
         }
     }

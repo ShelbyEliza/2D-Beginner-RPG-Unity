@@ -15,3 +15,5 @@ Assembly-CSharp.csproj
 /ProjectSettings
 /Temp
 /UserSettings
+/UIElementsSchema
+MyGameUI.uxml

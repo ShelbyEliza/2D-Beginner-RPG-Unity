@@ -66,10 +66,8 @@ public class PlayerController : MonoBehaviour
 
     public void ChangeHealth (int amount, bool overTime = false)
     {
-        //  Debug.Log("amount" + amount);
         if (amount < 0)
         {
-            Debug.Log("isInvincible: " + isInvincible);
             if (isInvincible)
             {
                 return;

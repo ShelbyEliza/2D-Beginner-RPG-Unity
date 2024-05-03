@@ -17,3 +17,5 @@ Assembly-CSharp.csproj
 /UserSettings
 /UIElementsSchema
 MyGameUI.uxml
+*.anim
+*.controller

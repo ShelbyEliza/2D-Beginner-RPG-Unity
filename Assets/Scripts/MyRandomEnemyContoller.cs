@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MyRandomEnemyController : MonoBehaviour
 {
+    Animator animator;
     Rigidbody2D rigidbody2d;
     public float speed;
     public bool vertical;
@@ -21,7 +22,7 @@ public class MyRandomEnemyController : MonoBehaviour
         }
         timer = pathStart;
         randomTime = Random.Range(1, 3);
-
+        animator = GetComponent<Animator>();
     }
         // Update is called once per frame
     void Update() {
@@ -48,9 +49,13 @@ public class MyRandomEnemyController : MonoBehaviour
         } 
 
         if (vertical == true) {
-           position.y = position.y + speed * Time.deltaTime;
+            position.y = position.y + speed * Time.deltaTime;
+            animator.SetFloat("Move X", 0);
+            animator.SetFloat("Move Y", speed);
         } else {
-           position.x = position.x + speed * Time.deltaTime;
+            position.x = position.x + speed * Time.deltaTime;
+            animator.SetFloat("Move X", speed);
+            animator.SetFloat("Move Y", 0);
         }
 
         rigidbody2d.MovePosition(position);

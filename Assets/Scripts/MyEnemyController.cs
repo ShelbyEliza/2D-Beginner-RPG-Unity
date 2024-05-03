@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MyEnemyController : MonoBehaviour
 {
+    Animator animator;
     Rigidbody2D rigidbody2d;
     public float speed;
     public bool vertical;
@@ -24,12 +26,15 @@ public class MyEnemyController : MonoBehaviour
         }
         xPathTimer = pathStart;
         yPathTimer = pathStart;
+
+        animator = GetComponent<Animator>();
     }
         // Update is called once per frame
     void Update() {
         if (xPathTimer > 3.0f) {
             timeToTurnX = true;
             vertical = true;
+
             if (yPathTimer > 3.0f) {
                 timeToTurnY = true;
                 vertical = false;
@@ -57,9 +62,13 @@ public class MyEnemyController : MonoBehaviour
         }
 
         if (vertical == true) {
-           position.y = position.y + speed * Time.deltaTime;
+            position.y = position.y + speed * Time.deltaTime;
+            animator.SetFloat("Move X", 0);
+            animator.SetFloat("Move Y", speed);
         } else {
-           position.x = position.x + speed * Time.deltaTime;
+            position.x = position.x + speed * Time.deltaTime;
+            animator.SetFloat("Move X", speed);
+            animator.SetFloat("Move Y", 0);
         }
 
         rigidbody2d.MovePosition(position);

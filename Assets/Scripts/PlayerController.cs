@@ -11,6 +11,10 @@ public class PlayerController : MonoBehaviour
     Vector2 move;
     public float speed = 3.0f;
 
+    // Variable related to player animation
+    Animator animator;
+    Vector2 moveDirection = new Vector2(1,0);
+
     // Variables related to temporary invincibility
     public float timeInvincible = 2.0f;
     bool isInvincible;
@@ -32,12 +36,24 @@ public class PlayerController : MonoBehaviour
         MoveAction.Enable();
         rigidbody2d = GetComponent<Rigidbody2D>();
         currentHealth = maxHealth;
+
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
         move = MoveAction.ReadValue<Vector2>();
+
+        if (!Mathf.Approximately(move.x, 0.0f) || !Mathf.Approximately(move.y, 0.0f)) {
+            moveDirection.Set(move.x, move.y);
+            moveDirection.Normalize();
+            Debug.Log("X: " + move.x + "Y: " + move.y);
+        }
+
+        animator.SetFloat("Look X", moveDirection.x);
+        animator.SetFloat("Look Y", moveDirection.y);
+        animator.SetFloat("Speed", move.magnitude);
 
         if (isInvincible)
         {
@@ -60,7 +76,7 @@ public class PlayerController : MonoBehaviour
     // FixedUpdate has the same call rate as the physics system
     void FixedUpdate()
     {
-        Vector2 position = (Vector2)rigidbody2d.position + move * speed * Time.deltaTime;
+        Vector2 position = (Vector2)rigidbody2d.position + speed * Time.deltaTime * move;
         rigidbody2d.MovePosition(position);
     }
 
@@ -74,6 +90,8 @@ public class PlayerController : MonoBehaviour
             }
             isInvincible = true;
             damageCooldown = timeInvincible;
+            
+            animator.SetTrigger("Hit");
         }
         if (overTime) {
             if (isHealing) {

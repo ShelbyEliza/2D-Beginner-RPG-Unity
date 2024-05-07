@@ -14,6 +14,9 @@ public class MyRandomEnemyController : MonoBehaviour
     float pathStart = 0.0f;
     float randomTime;
 
+    // Related to taking damage from player
+    bool aggressive = true;
+
     // Start is called before the first frame update
     void Start() {
         rigidbody2d = GetComponent<Rigidbody2D>();
@@ -26,7 +29,6 @@ public class MyRandomEnemyController : MonoBehaviour
     }
         // Update is called once per frame
     void Update() {
-        Debug.Log(timer + "," + randomTime);
         if (timer > randomTime) {
             timeToTurn = true;
             if (randomTime%2 == 0) {
@@ -41,6 +43,9 @@ public class MyRandomEnemyController : MonoBehaviour
 
     // FixedUpdate has the same call rate as the physics system
     void FixedUpdate() {
+        if (!aggressive) {
+           return;
+        }
         Vector2 position = rigidbody2d.position;
         if (timeToTurn == true) {
             randomTime = Random.Range(1, 3);
@@ -65,8 +70,13 @@ public class MyRandomEnemyController : MonoBehaviour
         PlayerController player = other.gameObject.GetComponent<PlayerController>();
 
         if (player != null) {
-            Debug.Log(player);
            player.ChangeHealth(damageVal);
         }
+   }
+
+      public void Fix() {
+       aggressive = false;
+       rigidbody2d.simulated = false;
+       animator.SetTrigger("Fixed");
    }
 }

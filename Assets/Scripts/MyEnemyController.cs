@@ -87,7 +87,6 @@ public class MyEnemyController : MonoBehaviour
         PlayerController player = other.gameObject.GetComponent<PlayerController>();
 
         if (player != null) {
-            Debug.Log(player);
            player.ChangeHealth(damageVal);
         }
    }
@@ -95,5 +94,6 @@ public class MyEnemyController : MonoBehaviour
    public void Fix() {
        aggressive = false;
        rigidbody2d.simulated = false;
+       animator.SetTrigger("Fixed");
    }
 }

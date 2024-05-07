@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-// using System.Numerics;
-// using UnityEngine.InputSystem;
 
 public class MyProjectile : MonoBehaviour {
     Rigidbody2D rigidbody2d;
@@ -23,11 +21,16 @@ public class MyProjectile : MonoBehaviour {
     }
 
     void OnCollisionEnter2D(Collision2D other) {
-        // Debug.Log("Projectile collision with " + other.gameObject);
         MyEnemyController enemy = other.collider.GetComponent<MyEnemyController>();
+        MyRandomEnemyController randomEnemy = other.collider.GetComponent<MyRandomEnemyController>();
+
 
         if (enemy != null) {
             enemy.Fix();
+        }
+
+        if (randomEnemy != null) {
+            randomEnemy.Fix();
         }
         Destroy(gameObject);
     }

@@ -7,16 +7,21 @@ public class MyEnemyController : MonoBehaviour
 {
     Animator animator;
     Rigidbody2D rigidbody2d;
+
+    public int damageVal = -1;
+
+    // Related to movement 
     public float speed;
     public bool vertical;
     bool timeToTurnX = false;
     bool timeToTurnY = false;
-    public int damageVal = -1;
-
     float xPathTimer;
     float yPathTimer;
 
     float pathStart = 0.0f;
+
+    // Related to taking damage from player
+    bool aggressive = true;
 
     // Start is called before the first frame update
     void Start() {
@@ -53,6 +58,10 @@ public class MyEnemyController : MonoBehaviour
 
     // FixedUpdate has the same call rate as the physics system
     void FixedUpdate() {
+        if (!aggressive) {
+           return;
+        }
+
         Vector2 position = rigidbody2d.position;
         if (timeToTurnX == true) {
             timeToTurnX = false;
@@ -81,5 +90,10 @@ public class MyEnemyController : MonoBehaviour
             Debug.Log(player);
            player.ChangeHealth(damageVal);
         }
+   }
+
+   public void Fix() {
+       aggressive = false;
+       rigidbody2d.simulated = false;
    }
 }

@@ -30,6 +30,10 @@ public class PlayerController : MonoBehaviour
     public int health { get { return currentHealth; }}
     int currentHealth;
 
+    // Variables related to projectile
+    public GameObject projectilePrefab;
+    public InputAction launchAction;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,6 +42,9 @@ public class PlayerController : MonoBehaviour
         currentHealth = maxHealth;
 
         animator = GetComponent<Animator>();
+
+        // launchAction.Enable();
+        // launchAction.performed += Launch;
     }
 
     // Update is called once per frame
@@ -48,7 +55,7 @@ public class PlayerController : MonoBehaviour
         if (!Mathf.Approximately(move.x, 0.0f) || !Mathf.Approximately(move.y, 0.0f)) {
             moveDirection.Set(move.x, move.y);
             moveDirection.Normalize();
-            Debug.Log("X: " + move.x + "Y: " + move.y);
+            // Debug.Log("X: " + move.x + "Y: " + move.y);
         }
 
         animator.SetFloat("Look X", moveDirection.x);
@@ -70,6 +77,10 @@ public class PlayerController : MonoBehaviour
             {
                 isHealing = false;
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.C)) {
+           Launch();
         }
     }
 
@@ -105,4 +116,14 @@ public class PlayerController : MonoBehaviour
         MyUIHandler.Instance.SetHealthValue(currentHealth / (float)maxHealth);
         Debug.Log(currentHealth + "/" + maxHealth);
     }
+
+    void Launch() {
+        GameObject projectileObject = Instantiate(projectilePrefab, rigidbody2d.position + Vector2.up * 0.5f, Quaternion.identity);
+
+        MyProjectile projectile = projectileObject.GetComponent<MyProjectile>();
+        projectile.Launch(moveDirection, 300);
+
+        animator.SetTrigger("Launch");
+    }
+
 }

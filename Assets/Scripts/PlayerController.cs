@@ -34,6 +34,9 @@ public class PlayerController : MonoBehaviour
     public GameObject projectilePrefab;
     public InputAction launchAction;
 
+    // Variables related to NPC
+    public InputAction talkAction;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,8 +46,8 @@ public class PlayerController : MonoBehaviour
 
         animator = GetComponent<Animator>();
 
-        // launchAction.Enable();
-        // launchAction.performed += Launch;
+        talkAction.Enable();
+        talkAction.performed += FindFriend;
     }
 
     // Update is called once per frame
@@ -55,7 +58,6 @@ public class PlayerController : MonoBehaviour
         if (!Mathf.Approximately(move.x, 0.0f) || !Mathf.Approximately(move.y, 0.0f)) {
             moveDirection.Set(move.x, move.y);
             moveDirection.Normalize();
-            // Debug.Log("X: " + move.x + "Y: " + move.y);
         }
 
         animator.SetFloat("Look X", moveDirection.x);
@@ -79,7 +81,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.C)) {
+        if (Input.GetKeyDown(KeyCode.C) || Input.GetKeyDown(KeyCode.Space)) {
            Launch();
         }
     }
@@ -121,9 +123,21 @@ public class PlayerController : MonoBehaviour
         GameObject projectileObject = Instantiate(projectilePrefab, rigidbody2d.position + Vector2.up * 0.5f, Quaternion.identity);
 
         MyProjectile projectile = projectileObject.GetComponent<MyProjectile>();
+
         projectile.Launch(moveDirection, 300);
 
         animator.SetTrigger("Launch");
     }
 
+    void FindFriend(InputAction.CallbackContext context) {
+        RaycastHit2D hit = Physics2D.Raycast(rigidbody2d.position + Vector2.up * 0.2f, moveDirection, 1.5f, LayerMask.GetMask("NPC"));
+
+        if (hit.collider != null) {
+            MyNonPlayerCharacter character = hit.collider.GetComponent<MyNonPlayerCharacter>();
+            
+            if (character != null) {
+                MyUIHandler.Instance.DisplayDialogue(character.dialogOption);
+            }
+        }
+    }
 }

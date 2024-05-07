@@ -16,6 +16,7 @@ Assembly-CSharp.csproj
 /Temp
 /UserSettings
 /UIElementsSchema
-MyGameUI.uxml
 *.anim
 *.controller
+/Assets/Fonts
+/Assets/UI

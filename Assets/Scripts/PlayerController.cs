@@ -37,6 +37,11 @@ public class PlayerController : MonoBehaviour
     // Variables related to NPC
     public InputAction talkAction;
 
+    // Variables related to audio
+    AudioSource audioSource;
+    public AudioClip damagedClip;
+    public AudioClip shootClip;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,6 +53,8 @@ public class PlayerController : MonoBehaviour
 
         talkAction.Enable();
         talkAction.performed += FindFriend;
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -58,6 +65,14 @@ public class PlayerController : MonoBehaviour
         if (!Mathf.Approximately(move.x, 0.0f) || !Mathf.Approximately(move.y, 0.0f)) {
             moveDirection.Set(move.x, move.y);
             moveDirection.Normalize();
+
+            if (!audioSource.isPlaying) {
+                audioSource.Play();
+            }
+        } else {
+            if (audioSource.isPlaying) {
+                audioSource.Pause();
+            }
         }
 
         animator.SetFloat("Look X", moveDirection.x);
@@ -105,6 +120,7 @@ public class PlayerController : MonoBehaviour
             damageCooldown = timeInvincible;
             
             animator.SetTrigger("Hit");
+            PlaySound(damagedClip);
         }
         if (overTime) {
             if (isHealing) {
@@ -127,6 +143,7 @@ public class PlayerController : MonoBehaviour
         projectile.Launch(moveDirection, 300);
 
         animator.SetTrigger("Launch");
+        PlaySound(shootClip);
     }
 
     void FindFriend(InputAction.CallbackContext context) {
@@ -139,5 +156,13 @@ public class PlayerController : MonoBehaviour
                 MyUIHandler.Instance.DisplayDialogue(character.dialogOption);
             }
         }
+    }
+
+    public void PlaySound(AudioClip clip) {
+        audioSource.PlayOneShot(clip);
+    }
+
+    public void PlayContSound() {
+
     }
 }

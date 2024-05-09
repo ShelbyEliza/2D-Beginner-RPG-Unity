@@ -23,6 +23,9 @@ public class MyEnemyController : MonoBehaviour
     // Related to taking damage from player
     bool aggressive = true;
 
+    // Related to audio
+    AudioSource audioSource;
+
     // Start is called before the first frame update
     void Start() {
         rigidbody2d = GetComponent<Rigidbody2D>();
@@ -33,6 +36,8 @@ public class MyEnemyController : MonoBehaviour
         yPathTimer = pathStart;
 
         animator = GetComponent<Animator>();
+
+        audioSource = GetComponent<AudioSource>();
     }
         // Update is called once per frame
     void Update() {
@@ -95,5 +100,6 @@ public class MyEnemyController : MonoBehaviour
        aggressive = false;
        rigidbody2d.simulated = false;
        animator.SetTrigger("Fixed");
+       audioSource.Stop();
    }
 }

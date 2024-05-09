@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MyRandomEnemyController : MonoBehaviour
-{
+public class MyRandomEnemyController : MonoBehaviour {
     Animator animator;
     Rigidbody2D rigidbody2d;
     public float speed;
@@ -17,6 +16,9 @@ public class MyRandomEnemyController : MonoBehaviour
     // Related to taking damage from player
     bool aggressive = true;
 
+    // Related to audio
+    AudioSource audioSource;
+
     // Start is called before the first frame update
     void Start() {
         rigidbody2d = GetComponent<Rigidbody2D>();
@@ -26,6 +28,8 @@ public class MyRandomEnemyController : MonoBehaviour
         timer = pathStart;
         randomTime = Random.Range(1, 3);
         animator = GetComponent<Animator>();
+
+        audioSource = GetComponent<AudioSource>();
     }
         // Update is called once per frame
     void Update() {
@@ -75,8 +79,9 @@ public class MyRandomEnemyController : MonoBehaviour
    }
 
       public void Fix() {
-       aggressive = false;
-       rigidbody2d.simulated = false;
-       animator.SetTrigger("Fixed");
+        aggressive = false;
+        rigidbody2d.simulated = false;
+        animator.SetTrigger("Fixed");
+        audioSource.Stop();
    }
 }

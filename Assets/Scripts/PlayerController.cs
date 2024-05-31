@@ -42,6 +42,10 @@ public class PlayerController : MonoBehaviour
     public AudioClip damagedClip;
     public AudioClip shootClip;
 
+    // VFX Effects
+    public ParticleSystem dizzyEffect;
+    public ParticleSystem healthEffect;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -75,6 +79,10 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        if (healthEffect.IsAlive()) {
+            healthEffect.transform.position = rigidbody2d.transform.position;
+        }
+
         animator.SetFloat("Look X", moveDirection.x);
         animator.SetFloat("Look Y", moveDirection.y);
         animator.SetFloat("Speed", move.magnitude);
@@ -102,19 +110,21 @@ public class PlayerController : MonoBehaviour
     }
 
     // FixedUpdate has the same call rate as the physics system
-    void FixedUpdate()
-    {
+    void FixedUpdate() {
         Vector2 position = (Vector2)rigidbody2d.position + speed * Time.deltaTime * move;
         rigidbody2d.MovePosition(position);
     }
 
-    public void ChangeHealth (int amount, bool overTime = false)
-    {
-        if (amount < 0)
-        {
-            if (isInvincible)
-            {
+    public void ChangeHealth (int amount, bool overTime = false) {
+        if (amount < 0) {
+                Debug.Log(dizzyEffect);              
+
+            if (isInvincible) {
                 return;
+            }
+            if (!dizzyEffect.IsAlive()) {
+                ParticleSystem dizzyInstance = Instantiate(dizzyEffect, rigidbody2d.transform.position, Quaternion.identity);
+                dizzyInstance.Play();
             }
             isInvincible = true;
             damageCooldown = timeInvincible;
@@ -130,6 +140,10 @@ public class PlayerController : MonoBehaviour
             healingCooldown = timeHealing; 
         }        
 
+        if (!healthEffect.IsAlive() && amount > 0) {
+            ParticleSystem healthBurstInstance = Instantiate(healthEffect, rigidbody2d.transform.position, Quaternion.identity);
+            healthBurstInstance.Play();
+        }
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
         MyUIHandler.Instance.SetHealthValue(currentHealth / (float)maxHealth);
         Debug.Log(currentHealth + "/" + maxHealth);
@@ -160,9 +174,5 @@ public class PlayerController : MonoBehaviour
 
     public void PlaySound(AudioClip clip) {
         audioSource.PlayOneShot(clip);
-    }
-
-    public void PlayContSound() {
-
     }
 }

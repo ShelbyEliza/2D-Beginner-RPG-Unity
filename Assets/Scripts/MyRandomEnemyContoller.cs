@@ -19,6 +19,8 @@ public class MyRandomEnemyController : MonoBehaviour {
     // Related to audio
     AudioSource audioSource;
 
+    public ParticleSystem smokeEffect;
+
     // Start is called before the first frame update
     void Start() {
         rigidbody2d = GetComponent<Rigidbody2D>();
@@ -83,5 +85,7 @@ public class MyRandomEnemyController : MonoBehaviour {
         rigidbody2d.simulated = false;
         animator.SetTrigger("Fixed");
         audioSource.Stop();
+
+        smokeEffect.Stop();
    }
 }
